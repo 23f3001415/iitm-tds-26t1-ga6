@@ -8,10 +8,10 @@
 4. A good rubric breaks quality into tiny YES/NO questions.
 5. Each question must be answerable just by reading the student's prompt text.
 6. That means you should check visible things such as:
-   - whether the prompt asks for JSON
-   - whether it gives an exact schema
-   - whether it says what to do for empty input
-   - whether it includes an example
+   - whether the prompt asks for a structured format
+   - whether it gives the required fields
+   - whether it says what to do for missing values
+   - whether it forbids extra text
 7. Do not ask about style preferences like "Is it nicely written?" because that is subjective.
 8. Do not ask about hidden intent like "Will this always work?" because the judge cannot know that from the text alone.
 9. Look at the three examples:
@@ -20,13 +20,13 @@
    - POOR is too vague
 10. So your checks should reward the details that make GOOD strong and mark missing details in MEDIOCRE and POOR.
 11. The safest checks are the ones tied to structure and constraints:
-   - valid JSON
-   - only JSON
-   - exact keys
-   - explicit types
-   - empty-input behavior
-   - example
-   - all required entity categories named
+   - explicit output format
+   - required fields
+   - field types
+   - no extra prose
+   - missing-value behavior
+   - handling multiple matches
+   - no invented facts
 12. Each line must be a complete question ending with `?`.
 13. You need exactly 7 lines, not 6 and not 8.
 
@@ -40,13 +40,13 @@
 ## Final Answer To Submit
 
 ```text
-Does the prompt explicitly require the response to be valid JSON?
-Does the prompt explicitly forbid any extra text outside the JSON output?
-Does the prompt specify the exact output schema with the keys "people", "orgs", and "locations"?
-Does the prompt explicitly state that "people", "orgs", and "locations" must each be arrays of strings?
-Does the prompt define what output to return when the input is empty?
-Does the prompt include at least one concrete input-output example showing the expected format?
-Does the prompt explicitly ask for extracting all three entity types: people, organizations, and locations, from the input text?
+Does the prompt explicitly specify the structured output format to return?
+Does the prompt specify the required output fields or keys?
+Does the prompt specify the expected type or container for each output field?
+Does the prompt instruct the model to output only the structured result and nothing else?
+Does the prompt define what to return when no value is found or the input is empty?
+Does the prompt define how multiple extracted items should be represented in the output?
+Does the prompt instruct the model not to invent values that are not supported by the input?
 ```
 
 Submit exactly those 7 lines.

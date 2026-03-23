@@ -30,3 +30,7 @@ This folder tracks GA6 assignment solutions question-by-question.
 - `q11/answer.txt`: final `leaked_count,leaked_accuracy,clean_accuracy,inflation_pp` result for Q11
 - `q11/train.csv`: copied training dataset
 - `q11/test.csv`: copied test dataset
+- `q12/solution.py`: idempotency, monotonicity, and null-stability checker
+- `q12/README.md`: ELI15 steps and final answer for Q12
+- `q12/answer.txt`: final `idempotency_violations,monotonicity_violations,null_stability_violations` result for Q12
+- `q12/records.csv`: copied preprocessing test dataset

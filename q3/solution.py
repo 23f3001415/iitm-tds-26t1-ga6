@@ -119,7 +119,7 @@ def solve() -> tuple[list[str], int, float, float]:
 
 def main() -> None:
     selected, word_count, macro_mean, model_floor = solve()
-    answer = f"{','.join(selected)}; {word_count}; {macro_mean:.3f}%; {model_floor:.2f}%"
+    answer = f"{','.join(selected)};{word_count};{macro_mean:.3f}%;{model_floor:.2f}%"
     print(answer)
 
 

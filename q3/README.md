@@ -60,7 +60,7 @@
 ## Final Answer To Submit
 
 ```text
-I11,I12,I14,I15; 38; 97.125%; 95.36%
+I11,I12,I14,I15;38;97.125%;95.36%
 ```
 
 ## Files in This Folder

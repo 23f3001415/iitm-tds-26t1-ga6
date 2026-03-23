@@ -27,16 +27,15 @@
 ## 2. Monotonicity
 
 10. The monotonicity column here is `value_a`.
-11. Look at all row pairs `(A, B)` where:
-   - original `value_a` of A is strictly greater than original `value_a` of B
-   - and neither original value is null
-12. After preprocessing, the order should not reverse.
-13. Because clipping is a monotone non-decreasing transform, ties at the clipping boundary are acceptable.
-14. So we count a violation only if:
-   - original `A > B`
-   - but processed `A < B`
+11. To avoid double-counting pairs, use a normal pair loop with `i < j`.
+12. For each such pair:
+   - skip it if either original `value_a` is null
+   - check whether original `value_a[i] > value_a[j]`
+13. If that original strict ordering holds, then the processed output must still satisfy:
+   - `processed_value_a[i] > processed_value_a[j]`
+14. If clipping turns those two rows into a tie, that still breaks the strict ordering and counts as a violation.
 15. On this dataset, the count is:
-   - `0`
+   - `48`
 
 ## 3. Null Stability
 
@@ -64,5 +63,5 @@ python solution.py
 ## Final Answer To Submit
 
 ```text
-28,0,0
+28,48,0
 ```

@@ -56,11 +56,15 @@ def main() -> None:
     monotonicity_violations = 0
     original = df["value_a"]
     processed = result1["value_a"]
-    valid_idx = [i for i, val in original.items() if not pd.isna(val)]
-    for i in valid_idx:
-        for j in valid_idx:
-            # Treat clipping ties as monotone-preserving; only a reversal would violate order.
-            if original.iloc[i] > original.iloc[j] and not (processed.iloc[i] >= processed.iloc[j]):
+    for i in range(len(df)):
+        if pd.isna(original.iloc[i]):
+            continue
+        for j in range(i + 1, len(df)):
+            if pd.isna(original.iloc[j]):
+                continue
+            # Count each pair once. If original value_a[i] > value_a[j],
+            # the processed output must preserve that strict ordering.
+            if original.iloc[i] > original.iloc[j] and not (processed.iloc[i] > processed.iloc[j]):
                 monotonicity_violations += 1
 
     null_stability_violations = 0

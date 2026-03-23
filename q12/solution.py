@@ -59,7 +59,8 @@ def main() -> None:
     valid_idx = [i for i, val in original.items() if not pd.isna(val)]
     for i in valid_idx:
         for j in valid_idx:
-            if original.iloc[i] > original.iloc[j] and not (processed.iloc[i] > processed.iloc[j]):
+            # Treat clipping ties as monotone-preserving; only a reversal would violate order.
+            if original.iloc[i] > original.iloc[j] and not (processed.iloc[i] >= processed.iloc[j]):
                 monotonicity_violations += 1
 
     null_stability_violations = 0

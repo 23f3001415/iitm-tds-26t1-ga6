@@ -30,20 +30,22 @@
 11. Look at all row pairs `(A, B)` where:
    - original `value_a` of A is strictly greater than original `value_a` of B
    - and neither original value is null
-12. After preprocessing, that same strict order should still hold:
-   - processed `value_a` of A should still be greater than processed `value_a` of B
-13. If clipping makes them tie or reverses the order, that pair is a violation.
-14. On this dataset, the count is:
-   - `90`
+12. After preprocessing, the order should not reverse.
+13. Because clipping is a monotone non-decreasing transform, ties at the clipping boundary are acceptable.
+14. So we count a violation only if:
+   - original `A > B`
+   - but processed `A < B`
+15. On this dataset, the count is:
+   - `0`
 
 ## 3. Null Stability
 
-15. If an input row had no nulls, the output row should also have no nulls.
-16. Check each row:
+16. If an input row had no nulls, the output row should also have no nulls.
+17. Check each row:
    - if input row null count is `0`
    - but output row null count is greater than `0`
    - then it is a violation
-17. Because the preprocessing fills missing values and does not create new nulls here, the count is:
+18. Because the preprocessing fills missing values and does not create new nulls here, the count is:
    - `0`
 
 ## Files in This Folder
@@ -62,5 +64,5 @@ python solution.py
 ## Final Answer To Submit
 
 ```text
-28,90,0
+28,0,0
 ```

@@ -53,14 +53,17 @@
 20. So:
    - `Macro-Mean = (96.13 + 98.87 + 95.36 + 98.14) / 4 = 97.125`
    - `Model Floor = 95.36`
-21. The exact values are:
+21. The raw values are:
    - `97.125%`
+   - `95.36%`
+22. For submission, use 2-decimal formatting:
+   - `97.12%`
    - `95.36%`
 
 ## Final Answer To Submit
 
 ```text
-I11,I12,I14,I15;38;97.125%;95.36%
+I11,I12,I14,I15;38;97.12%;95.36%
 ```
 
 ## Files in This Folder

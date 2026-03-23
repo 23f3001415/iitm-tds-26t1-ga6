@@ -20,3 +20,8 @@ This folder tracks GA6 assignment solutions question-by-question.
 - `q9/README.md`: ELI15 steps and final answer for Q9
 - `q9/answer.txt`: final `paraphrase,negation,near_duplicate` result for Q9
 - `q9/embeddings.json`: copied embeddings audit input
+- `q10/solution.py`: 8-gram contamination auditor
+- `q10/README.md`: ELI15 steps and final answer for Q10
+- `q10/answer.txt`: final `contaminated_count,reported_accuracy,adjusted_accuracy` result for Q10
+- `q10/questions.csv`: copied benchmark questions input
+- `q10/corpus.txt`: copied reference corpus input

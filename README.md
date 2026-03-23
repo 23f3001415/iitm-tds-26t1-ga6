@@ -16,6 +16,12 @@ This folder tracks GA6 assignment solutions question-by-question.
 - `q5/answer.txt`: anomalous Day 2 row count for Q5
 - `q5/day1.csv`: copied Day 1 clean dataset
 - `q5/day2.csv`: copied Day 2 corrupted dataset
+- `q6/query.sql`: worst-performing slice finder query
+- `q6/README.md`: ELI15 steps and final DuckDB query for Q6
+- `q7/query.sql`: optimal moderation threshold query
+- `q7/README.md`: ELI15 steps and final DuckDB query for Q7
+- `q8/query.sql`: flaky test finder query
+- `q8/README.md`: ELI15 steps and final DuckDB query for Q8
 - `q9/solution.py`: embedding invariance audit solver
 - `q9/README.md`: ELI15 steps and final answer for Q9
 - `q9/answer.txt`: final `paraphrase,negation,near_duplicate` result for Q9
@@ -34,3 +40,11 @@ This folder tracks GA6 assignment solutions question-by-question.
 - `q12/README.md`: ELI15 steps and final answer for Q12
 - `q12/answer.txt`: final `idempotency_violations,monotonicity_violations,null_stability_violations` result for Q12
 - `q12/records.csv`: copied preprocessing test dataset
+- `q13/query.sql`: latency SLA checker query
+- `q13/README.md`: ELI15 steps and final DuckDB query for Q13
+- `q14/solution.py`: benchmark overfitting calculator
+- `q14/README.md`: ELI15 steps and final answer for Q14
+- `q14/answer.txt`: final `sigma,inflation_pp,adjusted_accuracy` result for Q14
+- `q15/solution.py`: coverage gap calculator
+- `q15/README.md`: ELI15 steps and final answer for Q15
+- `q15/answer.txt`: final `line_coverage,branch_coverage,missing_runs,critical_missing` result for Q15

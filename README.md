@@ -16,3 +16,7 @@ This folder tracks GA6 assignment solutions question-by-question.
 - `q5/answer.txt`: anomalous Day 2 row count for Q5
 - `q5/day1.csv`: copied Day 1 clean dataset
 - `q5/day2.csv`: copied Day 2 corrupted dataset
+- `q9/solution.py`: embedding invariance audit solver
+- `q9/README.md`: ELI15 steps and final answer for Q9
+- `q9/answer.txt`: final `paraphrase,negation,near_duplicate` result for Q9
+- `q9/embeddings.json`: copied embeddings audit input

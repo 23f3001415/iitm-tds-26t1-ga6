@@ -20,13 +20,13 @@
    - POOR is too vague
 10. So your checks should reward the details that make GOOD strong and mark missing details in MEDIOCRE and POOR.
 11. The safest checks are the ones tied to structure and constraints:
-   - explicit output format
+   - exact schema or template
    - required fields
    - field types
-   - no extra prose
-   - missing-value behavior
+   - empty-input behavior
+   - missing-field behavior
    - handling multiple matches
-   - no invented facts
+   - whether all required fields must always appear
 12. Each line must be a complete question ending with `?`.
 13. You need exactly 7 lines, not 6 and not 8.
 
@@ -40,13 +40,13 @@
 ## Final Answer To Submit
 
 ```text
-Does the prompt explicitly specify the structured output format to return?
-Does the prompt specify the required output fields or keys?
-Does the prompt specify the expected type or container for each output field?
-Does the prompt instruct the model to output only the structured result and nothing else?
-Does the prompt define what to return when no value is found or the input is empty?
-Does the prompt define how multiple extracted items should be represented in the output?
-Does the prompt instruct the model not to invent values that are not supported by the input?
+Does the prompt define an explicit output schema or template instead of only asking for structured output?
+Does the prompt specify the exact output fields or keys that must appear?
+Does the prompt specify the expected value type for each field, such as string, array, object, number, or boolean?
+Does the prompt define what the output should be when the input is empty?
+Does the prompt define what value to use when a requested field cannot be extracted?
+Does the prompt specify how multiple extracted values should be represented in the output?
+Does the prompt make it clear that all required fields should still appear in the output even when some values are empty or missing?
 ```
 
 Submit exactly those 7 lines.

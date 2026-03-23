@@ -4,32 +4,32 @@
 
 from __future__ import annotations
 
-from itertools import compress
+import math
 
 
-FRAGMENTS = {
-    "I1": {"wc": 9, "scores": [0.06, 0.85, 0.23, -0.88]},
-    "I2": {"wc": 15, "scores": [0.23, 0.78, 0.68, 0.34]},
-    "I3": {"wc": 15, "scores": [0.66, 0.17, 0.48, 0.29]},
-    "I4": {"wc": 10, "scores": [1.23, -0.36, 1.09, 0.05]},
-    "I5": {"wc": 7, "scores": [-0.37, 0.62, 0.61, -0.46]},
-    "I6": {"wc": 12, "scores": [0.97, 0.16, 1.25, -0.25]},
-    "I7": {"wc": 17, "scores": [0.4, 0.98, -0.06, 1.37]},
-    "I8": {"wc": 8, "scores": [1.13, 1.29, -0.2, -0.22]},
-    "I9": {"wc": 6, "scores": [0.47, 0.67, 0.34, 0.36]},
-    "I10": {"wc": 13, "scores": [-0.06, 0.68, -0.39, 0.21]},
-    "I11": {"wc": 8, "scores": [0.45, -0.28, 0.95, 0.77]},
-    "I12": {"wc": 8, "scores": [0.42, 1.09, 0.09, 1.2]},
-    "I13": {"wc": 12, "scores": [0.88, 0.95, 0.39, 0.04]},
-    "I14": {"wc": 12, "scores": [0.58, 1.31, 0.55, 0.23]},
-    "I15": {"wc": 10, "scores": [0.98, 1.36, 0.18, -0.16]},
-    "I16": {"wc": 13, "scores": [0.22, 1.08, 0.33, -0.4]},
-    "I17": {"wc": 5, "scores": [0.76, -0.23, 0.21, -0.13]},
-    "I18": {"wc": 9, "scores": [-0.39, 0.94, 0.97, 0.38]},
-    "I19": {"wc": 16, "scores": [0.92, 0.8, 1.45, 0.07]},
-    "I20": {"wc": 15, "scores": [0.39, 0.43, 1.33, 0.9]},
-    "I21": {"wc": 6, "scores": [-0.12, -0.39, 0.17, 0.13]},
-}
+FRAGMENTS = [
+    ("I1", 9, [0.06, 0.85, 0.23, -0.88]),
+    ("I2", 15, [0.23, 0.78, 0.68, 0.34]),
+    ("I3", 15, [0.66, 0.17, 0.48, 0.29]),
+    ("I4", 10, [1.23, -0.36, 1.09, 0.05]),
+    ("I5", 7, [-0.37, 0.62, 0.61, -0.46]),
+    ("I6", 12, [0.97, 0.16, 1.25, -0.25]),
+    ("I7", 17, [0.4, 0.98, -0.06, 1.37]),
+    ("I8", 8, [1.13, 1.29, -0.2, -0.22]),
+    ("I9", 6, [0.47, 0.67, 0.34, 0.36]),
+    ("I10", 13, [-0.06, 0.68, -0.39, 0.21]),
+    ("I11", 8, [0.45, -0.28, 0.95, 0.77]),
+    ("I12", 8, [0.42, 1.09, 0.09, 1.2]),
+    ("I13", 12, [0.88, 0.95, 0.39, 0.04]),
+    ("I14", 12, [0.58, 1.31, 0.55, 0.23]),
+    ("I15", 10, [0.98, 1.36, 0.18, -0.16]),
+    ("I16", 13, [0.22, 1.08, 0.33, -0.4]),
+    ("I17", 5, [0.76, -0.23, 0.21, -0.13]),
+    ("I18", 9, [-0.39, 0.94, 0.97, 0.38]),
+    ("I19", 16, [0.92, 0.8, 1.45, 0.07]),
+    ("I20", 15, [0.39, 0.43, 1.33, 0.9]),
+    ("I21", 6, [-0.12, -0.39, 0.17, 0.13]),
+]
 
 PAIR_BONUSES = {
     ("I7", "I10"): -0.57,
@@ -79,47 +79,86 @@ PAIR_BONUSES = {
     ("I1", "I8"): 0.41,
 }
 
-MODEL_OFFSETS = [-2.37, -0.68, -2.48, 0.03]
-BASE_ACCURACY = 95.0
-TARGET_MEAN = 97.0
-TARGET_FLOOR = 92.0
+BASE_LOGITS = [-2.37, -0.68, -2.48, 0.03]
 
 
-def evaluate(selected_ids: list[str]) -> tuple[int, float, float]:
-    pair_bonus = sum(
-        bonus for pair, bonus in PAIR_BONUSES.items() if pair[0] in selected_ids and pair[1] in selected_ids
-    )
-    word_count = sum(FRAGMENTS[item]["wc"] for item in selected_ids)
-    model_scores = []
-    for model_index in range(4):
-        total = BASE_ACCURACY + MODEL_OFFSETS[model_index] + pair_bonus
-        total += sum(FRAGMENTS[item]["scores"][model_index] for item in selected_ids)
-        model_scores.append(total)
-    macro_mean = sum(model_scores) / 4
-    model_floor = min(model_scores)
-    return word_count, macro_mean, model_floor
+def logit_to_percent(logit: float) -> float:
+    return 100.0 / (1.0 + math.exp(-logit))
 
 
-def solve() -> tuple[list[str], int, float, float]:
-    ids = list(FRAGMENTS)
-    best: tuple[list[str], int, float, float] | None = None
+def enumerate_half(frags, id_lookup):
+    internal_pairs = []
+    for (a, b), bonus in PAIR_BONUSES.items():
+        if a in id_lookup and b in id_lookup:
+            internal_pairs.append((id_lookup[a], id_lookup[b], bonus))
 
-    for mask in range(1 << len(ids)):
-        selected = list(compress(ids, [(mask >> i) & 1 for i in range(len(ids))]))
-        word_count, macro_mean, model_floor = evaluate(selected)
-        if macro_mean < TARGET_MEAN or model_floor < TARGET_FLOOR:
-            continue
-        if best is None or word_count < best[1]:
-            best = (selected, word_count, macro_mean, model_floor)
+    subsets = []
+    n = len(frags)
+    for mask in range(1 << n):
+        wc = 0
+        sums = [0.0, 0.0, 0.0, 0.0]
+        chosen_ids = []
+        for i, (frag_id, frag_wc, frag_scores) in enumerate(frags):
+            if (mask >> i) & 1:
+                wc += frag_wc
+                chosen_ids.append(frag_id)
+                for m in range(4):
+                    sums[m] += frag_scores[m]
+
+        pair_bonus = 0.0
+        for i, j, bonus in internal_pairs:
+            if ((mask >> i) & 1) and ((mask >> j) & 1):
+                pair_bonus += bonus
+
+        subsets.append((mask, wc, [x + pair_bonus for x in sums], chosen_ids))
+    return subsets
+
+
+def solve():
+    left = FRAGMENTS[:10]
+    right = FRAGMENTS[10:]
+    left_ids = {frag_id: i for i, (frag_id, _, _) in enumerate(left)}
+    right_ids = {frag_id: i for i, (frag_id, _, _) in enumerate(right)}
+
+    left_subsets = enumerate_half(left, left_ids)
+    right_subsets = enumerate_half(right, right_ids)
+
+    cross_pairs = []
+    for (a, b), bonus in PAIR_BONUSES.items():
+        if a in left_ids and b in right_ids:
+            cross_pairs.append((left_ids[a], right_ids[b], bonus))
+        elif b in left_ids and a in right_ids:
+            cross_pairs.append((left_ids[b], right_ids[a], bonus))
+
+    best = None
+    for lmask, lwc, lsums, lids in left_subsets:
+        for rmask, rwc, rsums, rids in right_subsets:
+            wc = lwc + rwc
+            if best is not None and wc >= best[0]:
+                continue
+
+            cross_bonus = 0.0
+            for li, ri, bonus in cross_pairs:
+                if ((lmask >> li) & 1) and ((rmask >> ri) & 1):
+                    cross_bonus += bonus
+
+            logits = [BASE_LOGITS[m] + lsums[m] + rsums[m] + cross_bonus for m in range(4)]
+            probs = [logit_to_percent(x) for x in logits]
+            mean = sum(probs) / 4.0
+            floor = min(probs)
+
+            if mean >= 97.0 and floor >= 92.0:
+                chosen = sorted(lids + rids, key=lambda s: int(s[1:]))
+                best = (wc, chosen, mean, floor)
 
     if best is None:
-        raise RuntimeError("No valid prompt combination found.")
+        raise RuntimeError("No valid solution found.")
     return best
 
 
 def main() -> None:
-    selected, word_count, macro_mean, model_floor = solve()
-    answer = f"{','.join(selected)};{word_count};{macro_mean:.2f}%;{model_floor:.2f}%"
+    wc, chosen, mean, floor = solve()
+    answer = f"{','.join(chosen)};{wc};{mean:.2f}%;{floor:.2f}%"
     print(answer)
 
 

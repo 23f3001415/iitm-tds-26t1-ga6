@@ -11,3 +11,8 @@ This folder tracks GA6 assignment solutions question-by-question.
 - `q3/README.md`: ELI15 steps, scoring formula, and final answer for Q3
 - `q3/answer.txt`: final `IDs; WC; Mean%; Floor%` submission string for Q3
 - `q4/README.md`: ELI15 steps and final short prompt for Q4
+- `q5/solution.py`: data contract violation detector for Day 1 vs Day 2
+- `q5/README.md`: ELI15 steps and final answer for Q5
+- `q5/answer.txt`: anomalous Day 2 row count for Q5
+- `q5/day1.csv`: copied Day 1 clean dataset
+- `q5/day2.csv`: copied Day 2 corrupted dataset

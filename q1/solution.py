@@ -15,16 +15,10 @@ class RankedValue:
         return isinstance(other, RankedValue) and self.value == other.value
 
 
-@st.composite
-def ranked_value_lists(draw):
-    duplicated_value = draw(st.integers())
-    tail = draw(st.lists(st.integers(), max_size=8))
+@given(st.integers(), st.lists(st.integers(), max_size=8))
+def test_sort_ranked_queue_matches_stable_sorted_order(duplicated_value, tail):
     values = [duplicated_value, duplicated_value, *tail]
-    return [RankedValue(value=v, tag=i) for i, v in enumerate(values)]
-
-
-@given(ranked_value_lists())
-def test_sort_ranked_queue_matches_stable_sorted_order(items):
+    items = [RankedValue(value=v, tag=i) for i, v in enumerate(values)]
     result = sort_ranked_queue(items)
     expected = sorted(items, key=lambda item: item.value)
 

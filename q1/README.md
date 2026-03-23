@@ -15,13 +15,16 @@
 7. A correct stable sort should keep equal-valued items in the same order they started.
 8. The buggy function swaps adjacent equal-valued items when the left index is even.
 9. That means the `tag` order changes, and our property test catches it.
-10. We let Hypothesis generate lots of lists where the first two items have the same `value`.
-11. We compare:
+10. We let Hypothesis generate:
+    - one integer called `duplicated_value`
+    - one tail list of more integers
+11. Then inside the test we build a list starting with `[duplicated_value, duplicated_value, ...tail]`.
+12. We compare:
    - `sort_ranked_queue(items)`
    - Python's stable `sorted(items, key=lambda item: item.value)`
-12. If both `value` order and `tag` order match, the test passes.
-13. On the buggy implementation, Hypothesis quickly finds a counterexample.
-14. On the reference implementation, the test should pass.
+13. If both `value` order and `tag` order match, the test passes.
+14. On the buggy implementation, Hypothesis quickly finds a counterexample.
+15. On the reference implementation, the test should pass.
 
 ## Why This Works
 
@@ -49,16 +52,10 @@ class RankedValue:
         return isinstance(other, RankedValue) and self.value == other.value
 
 
-@st.composite
-def ranked_value_lists(draw):
-    duplicated_value = draw(st.integers())
-    tail = draw(st.lists(st.integers(), max_size=8))
+@given(st.integers(), st.lists(st.integers(), max_size=8))
+def test_sort_ranked_queue_matches_stable_sorted_order(duplicated_value, tail):
     values = [duplicated_value, duplicated_value, *tail]
-    return [RankedValue(value=v, tag=i) for i, v in enumerate(values)]
-
-
-@given(ranked_value_lists())
-def test_sort_ranked_queue_matches_stable_sorted_order(items):
+    items = [RankedValue(value=v, tag=i) for i, v in enumerate(values)]
     result = sort_ranked_queue(items)
     expected = sorted(items, key=lambda item: item.value)
 

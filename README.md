@@ -25,3 +25,8 @@ This folder tracks GA6 assignment solutions question-by-question.
 - `q10/answer.txt`: final `contaminated_count,reported_accuracy,adjusted_accuracy` result for Q10
 - `q10/questions.csv`: copied benchmark questions input
 - `q10/corpus.txt`: copied reference corpus input
+- `q11/solution.py`: train-test contamination scanner
+- `q11/README.md`: ELI15 steps and final answer for Q11
+- `q11/answer.txt`: final `leaked_count,leaked_accuracy,clean_accuracy,inflation_pp` result for Q11
+- `q11/train.csv`: copied training dataset
+- `q11/test.csv`: copied test dataset

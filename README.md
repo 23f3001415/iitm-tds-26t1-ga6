@@ -10,3 +10,4 @@ This folder tracks GA6 assignment solutions question-by-question.
 - `q3/solution.py`: brute-force solver for the multi-model robustness audit
 - `q3/README.md`: ELI15 steps, scoring formula, and final answer for Q3
 - `q3/answer.txt`: final `IDs; WC; Mean%; Floor%` submission string for Q3
+- `q4/README.md`: ELI15 steps and final short prompt for Q4
